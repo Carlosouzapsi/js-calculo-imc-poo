@@ -38,7 +38,7 @@ class Pessoa {
     valorImc = this.imc.toFixed(2);
     console.log("valorImc " + valorImc);
     let classificacao = "";
-    if (classificacao < 18.5) {
+    if (valorImc < 18.5) {
       classificacao = "Abaixo do peso";
     } else if (valorImc <= 24.9) {
       classificacao = "Peso normal";
