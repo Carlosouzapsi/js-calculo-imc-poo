@@ -115,7 +115,7 @@ console.log("Situação " + pessoa5.classificaImc());
 // console.log(pessoa2);
 // console.log(pessoa3);
 // console.log(pessoa4);
-
+// Comitando!
 // Imprimindo os objetos só que usando o calc do Imc junto com o metodo
 console.log(pessoa1.calculaImc());
 console.log(pessoa2.calculaImc());
