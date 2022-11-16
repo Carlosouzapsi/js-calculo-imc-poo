@@ -50,17 +50,26 @@ export class PessoaController {
   _adiciona(event) {
     event.preventDefault();
     // cria e adiciona nova pessoa na lista
-    const pessoaAdd = this._criaPessoa();
-    this._listaPessoas.adiciona(pessoaAdd);
+    const id = document.querySelector("#idPessoa").value;
+    // Se n"ao tiver id adiciona senao atualiza
+    if (!id) {
+      console.log("Não tem id" + id);
+      // adiciona nova pessoa na lista e atualizar a tela
+      const pessoaAdd = this._criaPessoa();
+      this._listaPessoas.adiciona(pessoaAdd);
 
-    // Adicionar no repositorio base de dados
-    this._pessoasRepository.criar(pessoaAdd);
-    // update da tela - preenche tabela com a pessia
-    this._pessoasView.update(this._listaPessoas);
+      // Adicionar no repositorio base de dados
+      this._pessoasRepository.criar(pessoaAdd);
+      // update da tela - preenche tabela com a pessoa
+      this._pessoasView.update(this._listaPessoas);
 
-    // definir e atualizar mensagem
-    this._mensagem.texto = "Pessoa cadastrada com sucesso!";
-    this._mensagemView.update(this._mensagem);
+      // definir e atualizar mensagem
+      this._mensagem.texto = "Pessoa cadastrada com sucesso!";
+      this._mensagemView.update(this._mensagem);
+    } else {
+      console.log("ID => " + id);
+      this.atualiza(id); // atualiza do controller
+    }
   }
   // criar pessoa método privado "_" )
   _criaPessoa() {
@@ -79,5 +88,40 @@ export class PessoaController {
     this._inputAltura.value = "";
 
     this._inputNome.focus();
+  }
+
+  preencheFormulario(nome, idade, peso, altura) {
+    this._inputNome.value = nome;
+    this._inputIdade.value = idade;
+    this._inputPeso.value = peso;
+    this._inputAltura.value = altura;
+  }
+  apaga(id) {
+    if (id) {
+      this._listaPessoas.remove(id); // remove da view
+      this._pessoasView.update(this._listaPessoas); // atualiza a view
+
+      this._pessoasRepository.apagar(id); // remove do repository
+      console.log("PessoaControlar Apagou");
+    }
+  }
+  atualiza(id) {
+    const pessoaAtualizada = this._criaPessoa();
+    console.log(pessoaAtualizada);
+
+    // Atualizar repositorio
+    this._pessoasRepository.atualizar(id, pessoaAtualizada);
+    console.log("Atualizou repositório");
+    // Atualizar lista
+    this._listaPessoas.atualiza(id, pessoaAtualizada);
+    console.log("Atualizou lista");
+
+    // Atualizar a view
+    this._pessoasView.update(this._listaPessoas);
+    document.querySelector("#idPessoa").value = null;
+  }
+  buscaPorId(id) {
+    let pessoaEncontrada = this._pessoasRepository.lerPorId(id);
+    return pessoaEncontrada;
   }
 }

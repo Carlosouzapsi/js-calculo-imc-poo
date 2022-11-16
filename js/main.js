@@ -11,9 +11,70 @@ formulario.addEventListener("submit", (event) => {
   // adiciona pessoa
   pessoaController._adiciona(event);
   // limpar formulario
-  // pessoaController.limpaFormulario();
+  pessoaController._limpaFormulario();
 });
 
+/// formulario formApagar
+const formApagarEditar = document.querySelector("#formApagarEditar");
+const btnApagar = document.querySelector("#btnApagar");
+const btnEditar = document.querySelector("#btnEditar");
+
+formApagarEditar.addEventListener("submit", (event) => {
+  event.preventDefault();
+});
+
+btnApagar.addEventListener("click", () => {
+  const id = document.querySelector("#id").value;
+  console.log("Apagar registro " + id);
+  document.querySelector("#id").value = null;
+
+  //// INTERAÇÕES COM JANELA MODAL ////
+  // Abrir janela modal
+  openModal(`Deseja apagar o registro ${id}?`);
+
+  // se clicar no botão sim
+  document.querySelector("#sim").addEventListener("click", () => {
+    pessoaController.apaga(id);
+    closeModal();
+  });
+});
+
+btnEditar.addEventListener("click", () => {
+  console.log("Editar");
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "smooth",
+  });
+  document.querySelector("#nome").focus();
+  const id = document.querySelector("#id").value;
+  console.log("Editar registro " + id);
+
+  document.querySelector("#idPessoa").value = id;
+  document.querySelector("#id").value = null;
+
+  const pessoa = pessoaController.buscaPorId(id);
+  // console.log(pessoa);
+
+  if (pessoa) {
+    const { _nome, _idade, _peso, _altura } = pessoa;
+    // Preenche o formulário com dados
+    pessoaController.preencheFormulario(_nome, _idade, _peso, _altura);
+  }
+});
+
+// Controle da janela modal
+function openModal(mensagem) {
+  document.querySelector("#modal").classList.add("active");
+  document.querySelector("#mensagemModal").innerHTML = `<h2>${mensagem}</h2>`;
+}
+
+function closeModal() {
+  document.querySelector("#modal").classList.remove("active");
+}
+
+document.querySelector("#modalClose").addEventListener("click", closeModal);
+document.querySelector("#nao").addEventListener("click", closeModal);
 /////////////////////////////
 //// Conceitos das aulas ////
 ////////////////////////////
