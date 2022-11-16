@@ -32,7 +32,6 @@ export class Pessoa {
   classificaImc() {
     // pegar o
     const valorImc = this.imc.toFixed(2);
-    console.log("valorImc " + valorImc);
     let classificacao = "";
     if (valorImc < 18.5) {
       classificacao = "Abaixo do peso";

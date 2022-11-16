@@ -1,6 +1,6 @@
 export class ListaPessoas {
-  constructor() {
-    this._pessoas = [];
+  constructor(lista = []) {
+    this._pessoas = lista;
   }
   adiciona(pessoa) {
     this._pessoas.push(pessoa);

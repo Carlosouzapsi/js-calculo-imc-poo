@@ -1,8 +1,10 @@
-export class PessoasView {
+import { View } from "../views/View.js";
+
+export class PessoasView extends View {
   constructor(elemento) {
-    this._elemento = elemento;
+    super(elemento);
   }
-  _template(model) {
+  template(model) {
     return `<table>
                  <thead>
                     <tr>
@@ -15,20 +17,17 @@ export class PessoasView {
                       .map((pessoa) => {
                         return `
                         <tr>
-                            <td>${pessoa.nome}</td>
-                            <td>${pessoa.idade}</td>
-                            <td>${pessoa.peso}</td>
-                            <td>${pessoa.altura}</td>
-                            <td>${pessoa.imc.toFixed(2)}</td>
-                            <td>${pessoa.classificaImc()}</td>
+                            <td>${pessoa._nome}</td>
+                            <td>${pessoa._idade}</td>
+                            <td>${pessoa._peso}</td>
+                            <td>${pessoa._altura}</td>
+                            <td>${pessoa._imc.toFixed(2)}</td>
+                            <td>${pessoa._classificacao}</td>
                         </tr>`;
                       })
                       .join("")}
                 </tbody>
             </table>
                     `;
-  }
-  update(model) {
-    this._elemento.innerHTML = this._template(model);
   }
 }
