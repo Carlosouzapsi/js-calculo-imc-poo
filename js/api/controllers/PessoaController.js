@@ -1,4 +1,6 @@
 import { Pessoa } from "../models/Pessoa.js";
+import { ListaPessoas } from "../models/ListaPessoas.js";
+import { PessoasView } from "../views/PessoasView.js";
 
 // Controle é uma classe de ações (neste caso, o crud)
 export class PessoaController {
@@ -14,6 +16,12 @@ export class PessoaController {
     this._inputIdade = document.querySelector("#idade");
     this._inputPeso = document.querySelector("#peso");
     this._inputAltura = document.querySelector("#altura");
+
+    // Criar a lista de pessoas
+    this._listaPessoas = new ListaPessoas();
+
+    this._pessoasView = new PessoasView(document.querySelector("#dados"));
+    this._pessoasView.update(this._listaPessoas);
   }
   ///////////////
   // metodos ///
@@ -21,9 +29,11 @@ export class PessoaController {
   // adicionar pessoa (método privado "_" )
   _adiciona(event) {
     event.preventDefault();
-    // criar uma pessoa
-    this._criaPessoa();
-    console.log(this._criaPessoa());
+    // cria e adiciona nova pessoa na lista
+    this._listaPessoas.adiciona(this._criaPessoa());
+    console.log(this._listaPessoas.pessoas);
+    // atualização da tela
+    this._pessoasView.update(this._listaPessoas);
   }
   // criar pessoa método privado "_" )
   _criaPessoa() {
