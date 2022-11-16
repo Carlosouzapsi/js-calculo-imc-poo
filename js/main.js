@@ -1,15 +1,19 @@
 import { PessoaController } from "./api/controllers/PessoaController.js";
+import { ModalHelper } from "../js/api/helpers/ModalHelper.js";
 
 const pessoaController = new PessoaController();
 
 // Controlar envio de formulário e sua exibição na tabela:
 // pega a TAG form.
-const formulario = document.querySelector("form");
+const formulario = document.querySelector("#formulario");
 
 // escutador de evento no formulário
 formulario.addEventListener("submit", (event) => {
   // adiciona pessoa
-  pessoaController._adiciona(event);
+  pessoaController.adiciona(event);
+
+  ModalHelper.ocultarBotoes();
+  ModalHelper.modal("Cadastro", "Pessoa cadastrada ou atualizada!");
   // limpar formulario
   pessoaController._limpaFormulario();
 });
@@ -24,18 +28,19 @@ formApagarEditar.addEventListener("submit", (event) => {
 });
 
 btnApagar.addEventListener("click", () => {
-  const id = document.querySelector("#id").value;
+  let id = document.querySelector("#id").value;
   console.log("Apagar registro " + id);
+
   document.querySelector("#id").value = null;
 
-  //// INTERAÇÕES COM JANELA MODAL ////
+  ModalHelper.mostrarBotoes();
   // Abrir janela modal
-  openModal(`Deseja apagar o registro ${id}?`);
-
+  ModalHelper.modal("Apagar registro", `Deseja apagar o registro ${id}?`);
   // se clicar no botão sim
   document.querySelector("#sim").addEventListener("click", () => {
     pessoaController.apaga(id);
-    closeModal();
+    id = null;
+    ModalHelper.closeModal();
   });
 });
 
@@ -63,18 +68,8 @@ btnEditar.addEventListener("click", () => {
   }
 });
 
-// Controle da janela modal
-function openModal(mensagem) {
-  document.querySelector("#modal").classList.add("active");
-  document.querySelector("#mensagemModal").innerHTML = `<h2>${mensagem}</h2>`;
-}
+ModalHelper.fecharJanela();
 
-function closeModal() {
-  document.querySelector("#modal").classList.remove("active");
-}
-
-document.querySelector("#modalClose").addEventListener("click", closeModal);
-document.querySelector("#nao").addEventListener("click", closeModal);
 /////////////////////////////
 //// Conceitos das aulas ////
 ////////////////////////////

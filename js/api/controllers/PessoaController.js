@@ -1,9 +1,8 @@
 import { Pessoa } from "../models/Pessoa.js";
 import { ListaPessoas } from "../models/ListaPessoas.js";
 import { PessoasView } from "../views/PessoasView.js";
-import { Mensagem } from "../models/Mensagem.js";
-import { MensagemView } from "../views/MensagemView.js";
-
+import { Modal } from "../models/Modal.js";
+import { ModalView } from "../views/ModalView.js";
 import { PessoasRepository } from "../../repositories/PessoasRepository.js";
 
 // Controle é uma classe de ações (neste caso, o crud)
@@ -25,7 +24,7 @@ export class PessoaController {
     // Repositorio - Operações de dados
     ////////////////////////////////////////
     this._pessoasRepository = new PessoasRepository();
-    console.log(this._pessoasRepository);
+    // console.log(this._pessoasRepository);
     const lista = this._pessoasRepository.ler();
     console.log(lista);
     ///////////////////////////////////////////////////
@@ -36,18 +35,20 @@ export class PessoaController {
     this._pessoasView.update(this._listaPessoas);
 
     // mensagem
-    this._mensagem = new Mensagem();
-    this._mensagemView = new MensagemView(document.querySelector("#mensagem"));
-    this._mensagemView.update(this._mensagem);
+    // this._mensagem = new Mensagem();
+    // this._mensagemView = new MensagemView(document.querySelector("#mensagem"));
+    // this._mensagemView.update(this._mensagem);
 
-    this._pessoasView = new PessoasView(document.querySelector("#dados"));
-    this._pessoasView.update(this._listaPessoas);
+    // Modal
+    this._modal = new Modal();
+    this._modalView = new ModalView(document.querySelector("#mensagemModal"));
+    this._modalView.update(this._modal);
   }
   ///////////////
   // metodos ///
   //////////////
   // adicionar pessoa (método privado "_" )
-  _adiciona(event) {
+  adiciona(event) {
     event.preventDefault();
     // cria e adiciona nova pessoa na lista
     const id = document.querySelector("#idPessoa").value;
@@ -64,8 +65,9 @@ export class PessoaController {
       this._pessoasView.update(this._listaPessoas);
 
       // definir e atualizar mensagem
-      this._mensagem.texto = "Pessoa cadastrada com sucesso!";
-      this._mensagemView.update(this._mensagem);
+      // this._mensagem.texto = "Pessoa cadastrada com sucesso!";
+      // this._mensagemView.update(this._mensagem);
+      this._modalView.update(this._modal);
     } else {
       console.log("ID => " + id);
       this.atualiza(id); // atualiza do controller
@@ -84,7 +86,7 @@ export class PessoaController {
   _limpaFormulario() {
     this._inputNome.value = "";
     this._inputIdade.value = "";
-    this._inpuPeso.value = "";
+    this._inputPeso.value = "";
     this._inputAltura.value = "";
 
     this._inputNome.focus();
@@ -97,13 +99,17 @@ export class PessoaController {
     this._inputAltura.value = altura;
   }
   apaga(id) {
-    if (id) {
-      this._listaPessoas.remove(id); // remove da view
-      this._pessoasView.update(this._listaPessoas); // atualiza a view
-
-      this._pessoasRepository.apagar(id); // remove do repository
-      console.log("PessoaControlar Apagou");
+    console.log("Id a ser apagado " + id);
+    if (!id) {
+      console.log("ID não foi informado");
+      return;
     }
+    console.log("ID " + id);
+    this._listaPessoas.remove(id); // remove da view
+    this._pessoasView.update(this._listaPessoas); // atualiza a view
+
+    this._pessoasRepository.apagar(id); // remove do repository
+    console.log("PessoaControlar Apagou");
   }
   atualiza(id) {
     const pessoaAtualizada = this._criaPessoa();
